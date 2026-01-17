@@ -56,7 +56,7 @@ header::after {
 }
 
 .logo img {
-  height: 80px;
+  height: 100px;
 }
 
 nav ul {
@@ -68,7 +68,7 @@ nav ul {
 nav ul li a {
   text-decoration: none;
   color: #4a2c1a;
-  font-size: 18px;
+  font-size: 20px;
   transition: opacity 0.2s ease;
 }
 
@@ -146,7 +146,7 @@ nav ul li a:hover {
   padding: 14px 28px;
   border: none;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
@@ -157,8 +157,8 @@ nav ul li a:hover {
 }
 
 .hero img {
-  width: 380px;
-  height: 380px;
+  width: 420px;
+  height: 420px;
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #4a2c1a;
@@ -189,14 +189,14 @@ section > * {
 }
 
 section h2 {
-  font-size: 36px;
+  font-size: 42px;
   color: #4a2c1a;
   margin-bottom: 10px;
 }
 
 .textblok {
-  max-width: 460px;
-  font-size: 19px;
+  max-width: 560px;
+  font-size: 20px;
   color: #3d2b1f;
   line-height: 1.4;
 }
@@ -249,14 +249,14 @@ section h2 {
   position: absolute;
   top: 10px;
   right: 15px;
-  font-size: 14px;
+  font-size: 18px;
   color: rgba(61, 43, 31, 0.6); /* subtiele kleur */
   font-style: italic;
 }
 
 .citaat h3 {
   font-family: "Georgia", serif;
-  font-size: 26px;
+  font-size: 30px;
   font-style: italic;
   color: #3d2b1f;
   letter-spacing: 1px;
@@ -280,7 +280,7 @@ section h2 {
   width: 260px;
   padding: 16px;
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 20px;
   background: #8f9c70;
   border: none;
   border-radius: 12px;
@@ -296,15 +296,11 @@ section h2 {
 /* -------------------- CONTACT -------------------- */
 
 /* ---------- CONTACT ACHTERGROND AFBEELDING ---------- */
-/* ---------- CONTACT DECORATIE ZONDER AFBEELDING ---------- */
-.contact {
-  position: relative;
-  overflow: hidden;
-}
+
 
 
 .contact {
-    background-color: #E6DDCF;
+  background-color: #E6DDCF;
   position: relative;
   overflow: hidden;
   background-color: #D6CCB9;
@@ -312,10 +308,10 @@ section h2 {
 
 .contact-inner {
   display: flex;
-  gap: 80px;
   justify-content: center;
-  margin-left: 25px;
+  margin: 0 auto;
 }
+
 
 form {
   display: flex;
@@ -331,7 +327,7 @@ form {
 
 form input, form textarea {
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: 18px;
   width: 100%;
   border: 0.5px solid #4a2c1a; 
   border-radius: 12px;
@@ -350,13 +346,11 @@ form textarea {
   resize: none;
 }
 
-
-
 form button {
   background-color: #4a2c1a;
   color: #fff;
   padding: 14px 20px;
-  font-size: 16px;
+  font-size: 20px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -369,6 +363,9 @@ form button:hover {
   background-color: #3d2415; /* optioneel: behoud iets donkerder als bij jou nu */
 }
 
+.contact-intro {
+  font-size: 18px;
+}
 
 /* Reviews box */
 .recensies-en-formulier {
@@ -392,7 +389,7 @@ form button:hover {
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  font-size: 16px;
+  font-size: 20px;
   color: #3d2b1f;
   text-align: center;
   display: flex;
@@ -460,13 +457,13 @@ footer {
 
 .footer-nav h4,
 .footer-contact h4 {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 8px;
 }
 
 .footer-nav li,
 .footer-contact p {
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 4px;
 }
 
@@ -525,6 +522,7 @@ footer.active::after {
   /* Contact: titel en recensie links uitlijnen */
 .contact-left {
   align-items: flex-start;
+  flex: 0 0 auto; /* blijft zoals vroeger */
 }
 
 .recensie-box {
@@ -540,21 +538,20 @@ footer.active::after {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    max-width: 1100px;
+    max-width: 1280px;
     margin: 0 auto;
     gap: 80px;
   }
 
-  .contact-left {
-    flex: 0 0 auto; /* blijft zoals vroeger */
-  }
 
-  .contact-right {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.contact-right {
+  position: relative; /* 👈 belangrijk */
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 
   .contact-right::before {
     content: "";
@@ -599,14 +596,7 @@ footer.active::after {
 }
 .reviews {
   height: 200px;
-  font-size: 17px;
-}
-
-.wave {
-  display: block;
-  width: 100%;
-  height: 150px;
-  margin-top: -5px; /* optioneel: sluit naadloos aan */
+  font-size: 20px;
 }
 
 }
@@ -690,7 +680,7 @@ footer.active::after {
 
   .hero button {
     margin: 20px auto 0;
-    font-size: 16px;
+    font-size: 20px;
     padding: 12px 22px;
   }
 
@@ -703,7 +693,7 @@ footer.active::after {
   nav ul { display: none; }
 
     /* Tekstblokken */
-  .textblok { font-size: 16px; max-width: 90%; }
+  .textblok { font-size: 20px; max-width: 90%; }
 
   /* Over mij & behandelingen flex */
   .overmij-flex,
@@ -754,7 +744,12 @@ form {
     margin: 0 auto;
 }
   /* Reviews */
-  .reviews { max-width: 280px; margin-right: 63px; width: 350px;}
+.reviews {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  font-size: 17px;
+}
 
   .review {
   position: absolute;

@@ -203,4 +203,3 @@ setTimeout(() => {
   showDailyQuote();
   setInterval(showDailyQuote, 24*60*60*1000);
 }, msUntilMidnight);
-

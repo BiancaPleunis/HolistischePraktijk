@@ -428,6 +428,8 @@ footer {
 
 .footer-nav li,
 .footer-contact p {
+          list-style: none;
+
   font-size: 15px;
   margin-bottom: 4px;
 }
@@ -519,7 +521,7 @@ footer.active::after {
 
   nav ul { display: none; }
 
-  .textblok { font-size: 20px; max-width: 90%; }
+  .textblok { font-size: 16px; max-width: 80%; text-align: center;}
 
   .overmij-flex,
   .behandelingen-flex {
@@ -530,7 +532,7 @@ footer.active::after {
   .overmij-section img { width: 370px; margin-top: 50px;}
 
   .leesmeer,
-  .behandelingen-list button { max-width: 240px; }
+  .behandelingen-list button { max-width: 240px;}
 
   .leesmeer  {
     margin: 20px auto 0;
@@ -540,17 +542,27 @@ footer.active::after {
 
   .citaat h3 { font-size: 20px; }
 
-  .contact { padding: 35px 15px; align-items: center; justify-content: center;}
-  .contact h2 { padding-bottom: 5px; text-align: center; margin-left: auto; margin-right: auto; }
+  .contact { padding: 35px 15px; align-items: center; justify-content: center; max-width: 600px;}
+  .contact h2 { text-align: center; margin-left: auto; margin-right: auto; font-size: 35px; }
 .contact-left {
     align-items: center;
     text-align: center;
   }
 
+  .behandelingen h2{
+    font-size: 35px;
+  }
+
+
+  .overmij h2{
+        font-size: 35px;
+
+  }
 
 .contact-intro {
-  text-align: center; 
-  margin: 0 auto 25px auto;
+    margin-top: -30px; /* dichterbij de titel */
+    margin-bottom: 25px; /* ruimte naar recensie */
+    font-size: 16px;
 }
 
 .recensie-box {
@@ -579,27 +591,51 @@ padding-top: 0px; align-items: center; justify-content: center;
     margin: -20px auto 0 auto; /* negatieve top marge om omhoog te schuiven */
 }
 
-
 form {
     max-width: 320px;
     margin: 0 auto;
     text-align: center;
   }
 
+  form input, form textarea {
+  font-size: 14px;
+  }
+
+  form button {
+  font-size: 18px;
+  }
+
   .reviews { width: 100%; max-width: 280px; margin: 0 auto; font-size: 17px; align-items: center;}
   .review { position: absolute; opacity: 0; transition: opacity 0.6s ease; width: 85%; align-items: center;}
 
+ footer .footer-nav ul,
+    footer .footer-contact ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+      footer .footer-container {
+        flex-direction: row;       /* items onder elkaar */
+        align-items: center;          /* horizontaal centreren */
+        text-align: center;           /* teksten centreren */
+        gap: 15px;                    /* ruimte tussen de items */
+        max-width: 100%;              /* gebruikt volledige breedte */
+        margin: 0 auto;
+    }
+
+    footer .footer-nav,
+    footer .footer-contact {
+        width: 100%;                  /* optioneel, voor consistente breedte */
+    }
+
+    footer .footer-bottom {
+        text-align: center;           /* centreren van copyright */
+    }
+
   .footer-logo { display: none; }
 
-  footer .footer-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    text-align: left;
-    gap: 20px;
-    max-width: 360px;
-    margin: 0 auto;
-  }
 
   .footer-logo img { height: 80px; }
   .footer-nav h4,
@@ -608,19 +644,16 @@ form {
   .footer-contact p { font-size: 12px; }
 
   .hamburger { display: flex; }
+
   .recensie-box {
     display: flex;
     justify-content: center;
     margin: 0 auto;
   }  
+  
   .reviews { 
     margin: 0 auto; 
     text-align: center; 
 }
 
-  .contact-intro {
-    text-align: center;
-    margin: 0 auto 25px auto;
-    margin-top: 0px;
-  }
 }

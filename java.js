@@ -179,7 +179,7 @@ function showDailyQuote() {
 
   // Quotes array
   const quotes = [
-    "Quote voor zondag",
+    "hoihoi",
     "Quote voor maandag",
     "Quote voor dinsdag",
     "Quote voor woensdag",

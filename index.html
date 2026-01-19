@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="stylesheet.css">
-  <script src="java.js" defer></script>
 
   <!-- EmailJS -->
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -14,11 +13,12 @@
     })();
   </script>
 
+  
+
   <title>Livé – Holistische Praktijk</title>
 </head>
 
 <body>
-  
 <header>
   <div class="logo">
     <img src="afbeeldingen/logo1_zonder_slogan.png" alt="Logo Livé" id="home-logo" />
@@ -39,70 +39,59 @@
 </header>
 
 <!-- HERO -->
-<section class="hero" id="home">
-  <div>
+<section class="hero reveal" id="home">
+  <div class="reveal reveal-delay-1">
     <h1>De kracht van de<br>zachte aandacht</h1>
-    <button>Plan een sessie</button>
+    <button class="reveal reveal-delay-2 reveal-scale">Plan een sessie</button>
   </div>
-  <img src="afbeeldingen/voorbeeld.png" alt="Bianca foto 1" />
+  <img src="afbeeldingen/voorbeeld.png" alt="Bianca foto 1" class="reveal reveal-delay-3 reveal-scale parallax-img" />
 </section>
-
-
 
 <!-- OVER MIJ -->
 <section class="overmij-section reveal" id="overmij">
-  </div>
-  <div id="overmij-anchor"></div>
-  <h2>Over mij</h2>
+  <h2 class="reveal reveal-delay-1">Over mij</h2>
   <div class="overmij-flex">
-    <div class="textblok">
+    <div class="textblok reveal reveal-delay-2">
       Hoi! Ik ben Bianca, <br><br>
       Met zachtheid en aandacht help ik mensen in balans. Met zachtheid en aandacht help ik mensen in balans. Met zachtheid en aandacht help ik mensen in balans.
-      <div class="leesmeer">Lees meer</div>
+    <div class="leesmeer reveal reveal-delay-3 reveal-scale">Lees meer</div>
     </div>
-    <img src="afbeeldingen/voorbeeld.png" alt="Bianca" class="overmij-img" />
+    <img src="afbeeldingen/voorbeeld.png" alt="Bianca" class="overmij-img reveal reveal-delay-4 reveal-scale parallax-img" />
   </div>
 </section>
 
 <!-- CITAAT -->
 <section class="citaat reveal">
-    <span id="quote-day"></span> <!-- voor de dag -->
-   <h3 id="quote">“Want als je voelt, dan heel je.”</h3>
+  <span id="quote-day" class="reveal reveal-delay-1"></span>
+  <h3 id="quote" class="reveal reveal-delay-2">“Want als je voelt, dan heel je.”</h3>
 </section>
 
 <!-- BEHANDELINGEN -->
 <section class="behandelingen reveal" id="behandelingen">
-  <div id="behandelingen-anchor"></div>
-  <h2>Behandelingen</h2>
+  <h2 class="reveal reveal-delay-1">Behandelingen</h2>
   <div class="behandelingen-flex">
-     <div class="textblok">
+    <div class="textblok reveal reveal-delay-2">
       Na de kennismaking in combinatie met de intake, <br> maken we een afspraak voor de eerste behandeling.
     </div>
     <div class="behandelingen-list">
-      <button>Holistische therapie</button>
-      <button>Familieopstelling</button>
-      <button>Energetische sessies</button>
+      <button class="reveal reveal-delay-3 reveal-scale">Holistische therapie</button>
+      <button class="reveal reveal-delay-4 reveal-scale">Familieopstelling</button>
+      <button class="reveal reveal-delay-5 reveal-scale">Energetische sessies</button>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section class="contact reveal" id="contact">
-
   <div class="contact-inner">
-
-
     <!-- Linker kolom -->
     <div class="contact-left">
-        <div id="contact-anchor"></div>
-
-      <h2>Contact</h2>
-           <p class="contact-intro">
+      <h2 class="reveal reveal-delay-1">Contact</h2>
+      <p class="contact-intro reveal reveal-delay-2">
         Heb je een vraag of wil je voelen of een sessie bij je past?<br>
         Neem vrijblijvend contact op!
       </p>
-
-      <div class="recensie-box">
+      <div class="recensie-box reveal reveal-delay-3">
         <div class="reviews">
           <div class="review active">
             "Ik voelde me meteen op mijn gemak. Een hele fijne ervaring!" — Anna
@@ -115,34 +104,28 @@
           </div>
         </div>
       </div>
-      
     </div>
-
-    
 
     <!-- Rechter kolom -->
-    <div class="contact-right">
-
+    <div class="contact-right reveal reveal-delay-4">
       <form id="contact-form">
-        <input type="text" name="name" placeholder="Naam" required />
-        <input type="email" name="email" placeholder="E-mail" required />
-        <input type="text" name="subject" placeholder="Onderwerp" required />
-        <textarea name="message" placeholder="Bericht" required></textarea>
-        <button type="submit">Verstuur</button>
+        <input type="text" name="name" placeholder="Naam" required class="reveal reveal-delay-1"/>
+        <input type="email" name="email" placeholder="E-mail" required class="reveal reveal-delay-2"/>
+        <input type="text" name="subject" placeholder="Onderwerp" required class="reveal reveal-delay-3"/>
+        <textarea name="message" placeholder="Bericht" required class="reveal reveal-delay-4"></textarea>
+        <button type="submit" class="reveal reveal-delay-5 reveal-scale">Verstuur</button>
       </form>
     </div>
-
   </div>
-
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-container">
-    <div class="footer-logo">
+  <div class="footer-container reveal">
+    <div class="footer-logo reveal reveal-delay-1">
       <img src="afbeeldingen/logo_nobackground.png" alt="Logo Livé">
     </div>
-    <div class="footer-nav">
+    <div class="footer-nav reveal reveal-delay-2">
       <h4>Navigatie</h4>
       <ul>
         <li>Home</li>
@@ -151,18 +134,19 @@
         <li>Contact</li>
       </ul>
     </div>
-    <div class="footer-contact">
+    <div class="footer-contact reveal reveal-delay-3">
       <h4>Contact</h4>
       <p>Bianca Pleunis</p>
       <p>holistischepraktijk.live@hotmail.com</p>
       <p>Weert</p>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="footer-bottom reveal reveal-delay-4">
     © 2026 Livé – Holistische Praktijk
   </div>
 </footer>
 
-<script src="responsive.js" defer></script>
+<script src="java.js" defer></script>
+<!-- <script src="responsive.js" defer></script> -->
 </body>
 </html>

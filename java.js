@@ -1,205 +1,234 @@
+// ========================
 // --- REVEAL EFFECT ---
+// ========================
 const reveals = document.querySelectorAll('.reveal');
-window.addEventListener('scroll', () => {
-  reveals.forEach(section => {
-    const windowHeight = window.innerHeight;
-    const elementTop = section.getBoundingClientRect().top;
-    const revealPoint = 150;
 
-    if (elementTop < windowHeight - revealPoint) {
-      section.classList.add('active');
+function revealOnScroll() {
+  const windowHeight = window.innerHeight;
+  reveals.forEach(el => {
+    const elementTop = el.getBoundingClientRect().top;
+    if (elementTop < windowHeight - 150) {
+      el.classList.add('active');
     }
+  });
+}
+
+// ========================
+// --- SMOOTH SCROLL ---
+// ========================
+function smoothScrollTo(element) {
+  if (!element) return;
+  const header = document.querySelector('header');
+  const headerHeight = header ? header.offsetHeight : 0;
+  const elementY = element.getBoundingClientRect().top + window.scrollY;
+
+  window.scrollTo({
+    top: elementY - headerHeight,
+    behavior: 'smooth'
+  });
+}
+
+// ========================
+// --- NAVIGATIE EVENTS ---
+// ========================
+document.querySelectorAll('nav ul li a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    smoothScrollTo(document.getElementById(targetId));
   });
 });
 
+document.querySelectorAll('.footer-nav li').forEach(link => {
+  link.addEventListener('click', () => {
+    const id = link.textContent.toLowerCase().replace(/\s/g, '');
+    smoothScrollTo(document.getElementById(id) || document.getElementById('home'));
+  });
+});
 
+const homeLogo = document.getElementById('home-logo');
+if (homeLogo) {
+  homeLogo.addEventListener('click', e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
-// --- SCROLL NAAR CONTACT ---
 const planButton = document.querySelector('.hero button');
 const contactSection = document.getElementById('contact');
-
-planButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  contactSection.scrollIntoView({ behavior: 'smooth' });
-});
-
-
-
-// --- SMOOTH SCROLL VOOR NAVIGATIE MET EXTRA OFFSET ---
-const menuLinks = document.querySelectorAll('nav ul li a');
-
-menuLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
+if (planButton && contactSection) {
+  planButton.addEventListener('click', e => {
     e.preventDefault();
-
-    const targetId = link.getAttribute('href').substring(1);
-    const targetSection = document.getElementById(targetId);
-
-    if (targetSection) {
-      const headerHeight = document.querySelector('header').offsetHeight;
-      const elementPosition = targetSection.offsetTop;
-      const offsetPosition = elementPosition - headerHeight - 20;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-
-      targetSection.scrollIntoView({
-  behavior: 'smooth',
-  block: 'start'
-});
-
-    }
+    smoothScrollTo(contactSection);
   });
-});
+}
 
-
-
-// --- LOGO SCROLL NAAR BOVEN ---
-const logo = document.getElementById('home-logo');
-logo.addEventListener('click', (e) => {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-
-// --- FOOTER ANIMATIE ---
+// ========================
+// --- FOOTER ---
+// ========================
 const footer = document.querySelector('footer');
-window.addEventListener('scroll', () => {
-  const windowHeight = window.innerHeight;
-  const footerTop = footer.getBoundingClientRect().top;
-
-  if (footerTop < windowHeight - 100) {
+function updateFooter() {
+  if (!footer) return;
+  if (footer.getBoundingClientRect().top < window.innerHeight - 100) {
     footer.classList.add('active');
   }
-});
+}
 
+// ========================
+// --- CONTACT FORM ---
+// ========================
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    emailjs.sendForm('service_hqpmmr9', 'template_bwi0ss9', contactForm)
+      .then(() => {
+        alert('Bericht succesvol verzonden! Dankjewel ♥');
+        contactForm.reset();
+      })
+      .catch(() => alert('Er ging iets mis. Probeer het later opnieuw.'));
+  });
+}
 
-// --- CONTACT FORM EMAILJS ---
-document.getElementById("contact-form").addEventListener("submit", function(e) {
-  e.preventDefault();
-  emailjs.sendForm("service_hqpmmr9", "template_bwi0ss9", this)
-    .then(() => {
-      alert("Bericht succesvol verzonden! Dankjewel ♥");
-      this.reset();
-    }, () => {
-      alert("Er ging iets mis. Probeer het later opnieuw.");
-    });
-});
-
-
-// --- AUTOMATISCHE REVIEW SLIDER ---
-
-// --- REVIEWS SCRIPT ---
+// ========================
+// --- REVIEWS SLIDER ---
+// ========================
 const reviews = document.querySelectorAll('.review');
-const recensieBoxes = document.querySelectorAll('.recensie-box'); // hele box klikbaar
 let currentReview = 0;
 
-// Functie om recensie te tonen
 function showReview(index) {
-  reviews.forEach((r, i) => {
-    r.classList.toggle('active', i === index);
-  });
+  reviews.forEach((r, i) => r.classList.toggle('active', i === index));
   currentReview = index;
 }
 
-// Klik event toevoegen aan elke recensie-box
-recensieBoxes.forEach((box, index) => {
-  box.addEventListener('click', () => {
-    let nextReview = (currentReview + 1) % reviews.length; // wrap around
-    showReview(nextReview);
-  });
-});
-
-// Optioneel: automatische slider blijft hetzelfde
 setInterval(() => {
-  let nextReview = (currentReview + 1) % reviews.length;
-  showReview(nextReview);
-}, 3500); // elke 3.5 seconden
+  showReview((currentReview + 1) % reviews.length);
+}, 3500);
 
+// ========================
+// --- LEES MEER ---
+// ========================
+const leesMeer = document.querySelector('.leesmeer');
+const textBlok = document.querySelector('.textblok');
+if (leesMeer && textBlok) {
+  leesMeer.addEventListener('click', () => {
+    textBlok.classList.toggle('expanded');
+  });
+}
 
-// (optioneel) automatisch laten overspringen
-// setInterval(() => {
-//   let nextReview = (currentReview + 1) % reviews.length;
-//   showReview(nextReview);
-// }, 5000); // elke 5 seconden
+// ========================
+// --- DAG & QUOTE ---
+// ========================
+const dagen = ["Zondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag"];
+const quotes = [
+  "hoihoi",
+  "Quote voor maandag",
+  "Quote voor dinsdag",
+  "Quote voor woensdag",
+  "Quote voor donderdag",
+  "Quote voor vrijdag",
+  "Want als je voelt, dan heel je."
+];
 
+function showDailyQuote() {
+  const day = new Date().getDay();
+  const quote = document.getElementById('quote');
+  const dayEl = document.getElementById('quote-day');
+  if (quote && dayEl) {
+    quote.textContent = quotes[day];
+    dayEl.textContent = dagen[day];
+  }
+}
+showDailyQuote();
 
-// --- SMOOTH SCROLL VOOR FOOTER NAVIGATIE ---
-const footerLinks = document.querySelectorAll('.footer-nav li');
+// ========================
+// --- CITAAT SCROLL EFFECT ---
+// ========================
+const citaat = document.querySelector('.citaat');
+const quoteElementC = document.getElementById('quote');
+let glowDiv = null;
 
-footerLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    const sectionId = link.textContent.toLowerCase().replace(' ', ''); // "over mij" -> "overmij"
-    const section = document.getElementById(sectionId) || document.getElementById('home');
-    if(section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+if (quoteElementC && quoteElementC.parentElement) {
+  glowDiv = document.createElement('div');
+  glowDiv.style.position = 'absolute';
+  glowDiv.style.top = '0';
+  glowDiv.style.left = '-100%';
+  glowDiv.style.width = '50%';
+  glowDiv.style.height = '100%';
+  glowDiv.style.background =
+    'linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)';
+  glowDiv.style.transform = 'skewX(-25deg)';
+  glowDiv.style.pointerEvents = 'none';
+  glowDiv.style.zIndex = '3';
+  quoteElementC.parentElement.style.position = 'relative';
+  quoteElementC.parentElement.appendChild(glowDiv);
+}
+
+function updateCitaat() {
+  if (!citaat || !quoteElementC) return;
+  const rect = citaat.getBoundingClientRect();
+  const windowHeight = window.innerHeight;
+  const progress = Math.min(Math.max(1 - rect.top / windowHeight, 0), 1);
+
+  const movement = (progress - 0.5) * 20;
+  const scale = 0.95 + progress * 0.05;
+  const opacity = 0.5 + progress * 0.5;
+
+  quoteElementC.style.transform = `translateY(${movement}px) scale(${scale})`;
+  quoteElementC.style.opacity = opacity;
+
+  if (glowDiv) glowDiv.style.left = `${-100 + progress * 200}%`;
+}
+
+// ========================
+// --- PARALLAX ---
+// ========================
+const parallaxImgs = document.querySelectorAll('.parallax-img');
+
+function updateParallax() {
+  const windowHeight = window.innerHeight;
+  parallaxImgs.forEach(img => {
+    const rect = img.getBoundingClientRect();
+    if (rect.bottom > 0 && rect.top < windowHeight) {
+      const progress = 1 - rect.top / windowHeight;
+      img.style.transform = `translateY(${progress * 15}px)`;
     }
   });
-});
+}
 
-
-// Hamburger menu toggle
+// ========================
+// --- HAMBURGER MENU ---
+// ========================
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  navLinks.classList.toggle('open');
-});
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
 
-// Sluit menu als er op een link wordt geklikt
-document.querySelectorAll('.nav-links li a').forEach(link => {
-  link.addEventListener('click', () => {
-    if(navLinks.classList.contains('open')) {
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
       navLinks.classList.remove('open');
       hamburger.classList.remove('active');
-    }
+    });
   });
-});
-
-const leesMeer = document.querySelector('.leesmeer');
-const textBlok = document.querySelector('.textblok');
-
-leesMeer.addEventListener('click', () => {
-  textBlok.classList.toggle('expanded');
-});
-
-// Array met dagen
-const dagen = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
-
-// Functie om dag en quote te tonen
-function showDailyQuote() {
-  const today = new Date();
-  const dayIndex = today.getDay(); // 0 = zondag, 1 = maandag ...
-  
-  const quoteElement = document.getElementById('quote');
-  const dayElement = document.getElementById('quote-day');
-
-  // Quotes array
-  const quotes = [
-    "hoihoi",
-    "Quote voor maandag",
-    "Quote voor dinsdag",
-    "Quote voor woensdag",
-    "Quote voor donderdag",
-    "Quote voor vrijdag",
-    "Want als je voelt, dan heel je."
-  ];
-
-  quoteElement.textContent = quotes[dayIndex];
-  dayElement.textContent = dagen[dayIndex]; // toont de dag
 }
 
-// Bij pagina load
-showDailyQuote();
+// ========================
+// --- SCROLL LOOP ---
+// ========================
+function scrollLoop() {
+  revealOnScroll();
+  updateFooter();
+  updateCitaat();
+  updateParallax();
+  window.requestAnimationFrame(scrollLoop);
+}
 
-// Update automatisch om middernacht
-const now = new Date();
-const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1,0,0,0) - now;
-
-setTimeout(() => {
-  showDailyQuote();
-  setInterval(showDailyQuote, 24*60*60*1000);
-}, msUntilMidnight);
+// Start scroll loop direct na load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+  scrollLoop(); // ✅ geen dubbele listener
+});

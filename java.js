@@ -93,40 +93,72 @@ if (contactForm) {
 // ========================
 // --- REVIEWS SLIDER ---
 // ========================
-const reviews = document.querySelectorAll('.review');
 let currentReview = 0;
+const reviews = document.querySelectorAll('.review');
+const reviewIntervalTime = 10000; // 10 seconden
+let reviewInterval;
 
 function showReview(index) {
   reviews.forEach((r, i) => r.classList.toggle('active', i === index));
   currentReview = index;
 }
 
-setInterval(() => {
-  showReview((currentReview + 1) % reviews.length);
-}, 3500);
+// Automatisch starten
+function startReviewInterval() {
+  reviewInterval = setInterval(() => {
+    showReview((currentReview + 1) % reviews.length);
+  }, reviewIntervalTime);
+}
+
+// Stoppen interval (voor eventueel herstart bij klik)
+function resetReviewInterval() {
+  clearInterval(reviewInterval);
+  startReviewInterval();
+}
+
+// Start de loop bij load
+startReviewInterval();
+const reviewBox = document.querySelector('.recensie-box');
+
+if (reviewBox) {
+  reviewBox.addEventListener('click', () => {
+    showReview((currentReview + 1) % reviews.length);
+    resetReviewInterval(); // herstart de automatische loop
+  });
+}
 
 // ========================
 // --- LEES MEER ---
 // ========================
-const leesMeer = document.querySelector('.leesmeer');
-const textBlok = document.querySelector('.textblok');
-if (leesMeer && textBlok) {
-  leesMeer.addEventListener('click', () => {
-    textBlok.classList.toggle('expanded');
+const leesMeerBtn = document.querySelector('.leesmeer');
+const textBlokEl = document.querySelector('.textblok');
+
+if (leesMeerBtn && textBlokEl) {
+  leesMeerBtn.addEventListener('click', () => {
+    textBlokEl.classList.toggle('expanded');
+    leesMeerBtn.classList.toggle('expanded');
+
+    // Knoptekst wisselen
+    if (leesMeerBtn.classList.contains('expanded')) {
+      leesMeerBtn.textContent = "Korter";
+    } else {
+      leesMeerBtn.textContent = "Lees meer";
+    }
   });
 }
+
 
 // ========================
 // --- DAG & QUOTE ---
 // ========================
 const dagen = ["Zondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag"];
 const quotes = [
-  "hoihoi",
-  "Quote voor maandag",
-  "Quote voor dinsdag",
-  "Quote voor woensdag",
-  "Quote voor donderdag",
-  "Quote voor vrijdag",
+  "Waar liggen de wortels van jouw verhaal?",
+  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
+  "Want als je voelt, dan heel je.",
+  "Kies ik het pad van angst, of stap ik in het veld van liefde?",
+  "Waar liggen de wortels van jouw verhaal?",
+  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
   "Want als je voelt, dan heel je."
 ];
 

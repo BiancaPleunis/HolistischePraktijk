@@ -1,32 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-   <!-- Hoofdpagina -->
    <url>
       <loc>https://biancapleunis.github.io/HolistischePraktijk/</loc>
       <changefreq>monthly</changefreq>
       <priority>1.0</priority>
-   </url>
-
-   <!-- Over mij sectie -->
-   <url>
-      <loc>https://biancapleunis.github.io/HolistischePraktijk/#overmij</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-
-   <!-- Behandelingen sectie -->
-   <url>
-      <loc>https://biancapleunis.github.io/HolistischePraktijk/#behandelingen</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-
-   <!-- Contact sectie -->
-   <url>
-      <loc>https://biancapleunis.github.io/HolistischePraktijk/#contact</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
    </url>
 
 </urlset>

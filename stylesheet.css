@@ -461,7 +461,7 @@ form button:hover {
 }
 
 .contact-intro {
-  font-size: 18px;
+    font-size: 20px;
   padding-top: 40px;
 }
 
@@ -759,7 +759,7 @@ footer.active::after {
 
   .citaat h3 { font-size: 20px; }
 
-  .contact { padding: 35px 15px; align-items: center; justify-content: center; max-width: 600px;}
+  .contact { padding: 35px 15px; align-items: center; justify-content: center; }
   .contact h2 { text-align: center; margin-left: auto; margin-right: auto; font-size: 35px; }
 .contact-left {
     align-items: center;

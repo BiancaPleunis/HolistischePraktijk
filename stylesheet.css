@@ -352,6 +352,11 @@ text-shadow: 1px 1px 5px rgba(255,255,255,0.2);
   );
 }
 
+#letter {
+  font-size: 12px;
+  font-family:fantasy;
+}
+
 .behandelingen-flex {
   display: flex;
   justify-content: space-between;
@@ -364,10 +369,9 @@ text-shadow: 1px 1px 5px rgba(255,255,255,0.2);
   color: #4a2c1a;
   border: 1.5px solid #8f9c70;
   border-radius: 14px;
-  padding: 16px 22px;
+  padding: 16px 18px;
   font-size: 20px;
   font-style: italic;
-  cursor: pointer;
   transition:
     background-color 0.25s ease,
     color 0.25s ease,

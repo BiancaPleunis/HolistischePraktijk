@@ -2,7 +2,7 @@
 // --- SUPABASE ---
 // ========================
 
-const SUPABASE_URL = "https://ylayjxueqejgpmkfoaqt.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://ylayjxueqejgpmkfoaqt.supabase.co/rest/v1/reviews";
 const SUPABASE_ANON_KEY = "sb_publishable_VBhAT_cZRLDZoEIPyfGPEQ_0FdWVCEx";
 
 const supabaseClient = supabase.createClient(

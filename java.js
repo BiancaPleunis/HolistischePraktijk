@@ -271,12 +271,34 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqnlnq";
 //
 
 const approvedReviews = [
-    // Voorbeeld:
-    // {
-    //     name: "Anoniem",
-    //     rating: 5,
-    //     text: "Een hele fijne ervaring. Ik voelde me direct op mijn gemak."
-    // }
+    {
+        name: "M.",
+        rating: 5,
+        text: "Ik weet niet hoe het werkt en hoe snel; maar voel me een stuk beter dan straks 😊"
+    },
+    {
+        name: "P.",
+        rating: 5,
+        text: "Met mijn hoofd gaat t een stuk beter, geen idee hoe t werkt, maar t werkt!"
+    }
+    ,
+    {
+        name: "C.",
+        rating: 5,
+        text: "Dankjewel Bianca de pijn in mijn onderrug is vanaf half vier al een stuk minder."
+    }
+     ,
+    {
+        name: "P.",
+        rating: 5,
+        text: "Hoi Bianca, ik voel me weer wat meer mens na de reiki van jou👍"
+    }
+     ,
+    {
+        name: "P.",
+        rating: 5,
+        text: "Ik voel mij al een stuk beter, dank je wel."
+    }
 ];
 
 

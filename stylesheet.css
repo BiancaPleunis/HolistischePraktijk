@@ -888,7 +888,7 @@ footer::after {
 }
 
 footer.active::after {
-  animation: growLine 2s ease forwards;
+animation: growLine 2s ease forwards;
 }
 
 /* -------------------- REVEAL EFFECT -------------------- */

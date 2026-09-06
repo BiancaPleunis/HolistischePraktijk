@@ -1,18 +1,3 @@
-// ========================
-// --- SUPABASE ---
-// ========================
-
-
-
-const SUPABASE_URL = "https://ylayjxueqejgpmkfoaqt.supabase.co/rest/v1/";
-const SUPABASE_ANON_KEY = "sb_publishable_VBhAT_cZRLDZoEIPyfGPEQ_0FdWVCEx";
-
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
 
 // ========================
 // --- REVEAL EFFECT ---
@@ -270,7 +255,91 @@ function scrollLoop() {
 
 
 // ========================
-// --- REVIEWS / STERREN ---
+// --- REVIEWS / FORMSPREE ---
+// ========================
+
+// PLAK HIER JOUW FORMSPREE-URL
+const FORMSPREE_ENDPOINT = "HIER-JOUW-FORMSPREE-URL";
+
+
+// ========================
+// --- GOEDGEKEURDE REVIEWS ---
+// ========================
+//
+// Hier komen de reviews te staan die jij hebt goedgekeurd.
+// Nieuwe reviews worden eerst naar jou verstuurd via Formspree.
+// Nadat jij een review hebt goedgekeurd, kunnen we hem hier toevoegen.
+//
+
+const approvedReviews = [
+    // Voorbeeld:
+    // {
+    //     name: "Anoniem",
+    //     rating: 5,
+    //     text: "Een hele fijne ervaring. Ik voelde me direct op mijn gemak."
+    // }
+];
+
+
+// ========================
+// --- HTML VEILIG MAKEN ---
+// ========================
+
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+
+// ========================
+// --- REVIEWS LADEN ---
+// ========================
+
+function loadReviews() {
+    const reviewsList = document.getElementById("reviews-list");
+
+    if (!reviewsList) {
+        return;
+    }
+
+    reviewsList.innerHTML = "";
+
+    if (!approvedReviews || approvedReviews.length === 0) {
+        reviewsList.innerHTML = `
+            <p class="geen-reviews">
+                Er zijn nog geen reviews geplaatst.
+            </p>
+        `;
+        return;
+    }
+
+    approvedReviews.forEach((review) => {
+        const reviewCard = document.createElement("div");
+
+        reviewCard.className = "review-card";
+
+        const naam = review.name || "Anoniem";
+        const tekst = review.text || "";
+        const rating = Math.min(5, Math.max(0, Number(review.rating) || 0));
+
+        const sterren =
+            "★".repeat(rating) +
+            "☆".repeat(5 - rating);
+
+        reviewCard.innerHTML = `
+            <div class="review-stars">${sterren}</div>
+            <p class="review-text">"${escapeHTML(tekst)}"</p>
+            <p class="review-name">${escapeHTML(naam)}</p>
+        `;
+
+        reviewsList.appendChild(reviewCard);
+    });
+}
+
+
+// ========================
+// --- STERREN SELECTEREN ---
 // ========================
 
 const starButtons = document.querySelectorAll(".star-rating button");
@@ -287,7 +356,6 @@ function updateStars(rating) {
         }
     });
 
-    // Verborgen input bijwerken
     if (ratingInput) {
         ratingInput.value = rating;
     }
@@ -296,142 +364,9 @@ function updateStars(rating) {
 starButtons.forEach((star) => {
     star.addEventListener("click", () => {
         selectedRating = Number(star.dataset.rating);
-
         updateStars(selectedRating);
     });
 });
-
-
-
-// ========================
-// --- REVIEWS LADEN ---
-// ========================
-
-async function loadReviews() {
-    const reviewsList = document.getElementById("reviews-list");
-
-    if (!reviewsList) {
-        return;
-    }
-
-    try {
-        const { data, error } = await supabaseClient
-            .from("reviews")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
-
-        if (error) {
-            console.error("Fout bij ophalen reviews:", error);
-            return;
-        }
-
-        reviewsList.innerHTML = "";
-
-        if (!data || data.length === 0) {
-            reviewsList.innerHTML = `
-                <p class="geen-reviews">
-                    Er zijn nog geen reviews geplaatst.
-                </p>
-            `;
-            return;
-        }
-
-        data.forEach((review) => {
-            const reviewCard = document.createElement("div");
-
-            reviewCard.className = "review-card";
-
-            const naam = review.name || review.naam || "Anoniem";
-            const tekst = review.review || review.text || review.tekst || "";
-            const rating = Number(review.rating) || 0;
-
-            const sterren = "★".repeat(rating) + "☆".repeat(5 - rating);
-
-            reviewCard.innerHTML = `
-                <div class="review-stars">${sterren}</div>
-                <p class="review-text">"${escapeHTML(tekst)}"</p>
-                <p class="review-name">${escapeHTML(naam)}</p>
-            `;
-
-            reviewsList.appendChild(reviewCard);
-        });
-
-    } catch (error) {
-        console.error("Onverwachte fout bij laden reviews:", error);
-    }
-}
-
-
-// ========================
-// --- HTML VEILIG MAKEN ---
-// ========================
-
-function escapeHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-
-// ========================
-// --- REVIEW FORMULIER ---
-// ========================
-
-const reviewForm = document.getElementById("review-form");
-
-if (reviewForm) {
-    reviewForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const nameInput = document.getElementById("review-name");
-        const reviewInput = document.getElementById("review-text");
-
-        if (!nameInput || !reviewInput) {
-            return;
-        }
-
-        const name = nameInput.value.trim();
-        const text = reviewInput.value.trim();
-
-        if (!name || !text || selectedRating === 0) {
-            alert("Vul je naam, review en aantal sterren in.");
-            return;
-        }
-
-        try {
-            const { error } = await supabaseClient
-                .from("reviews")
-                .insert([
-                    {
-                        name: name,
-                        review: text,
-                        rating: selectedRating
-                    }
-                ]);
-
-            if (error) {
-                console.error("Fout bij plaatsen review:", error);
-                alert("Er ging iets mis bij het plaatsen van je review.");
-                return;
-            }
-
-            alert("Bedankt voor je review!");
-
-            reviewForm.reset();
-
-            selectedRating = 0;
-            updateStars(0);
-
-            loadReviews();
-
-        } catch (error) {
-            console.error("Onverwachte fout:", error);
-            alert("Er ging iets mis. Probeer het later opnieuw.");
-        }
-    });
-}
 
 
 // ========================
@@ -453,6 +388,99 @@ function createInitials(name) {
         parts[0].charAt(0) +
         parts[parts.length - 1].charAt(0)
     ).toUpperCase();
+}
+
+
+// ========================
+// --- REVIEW FORMULIER ---
+// ========================
+
+const reviewForm = document.getElementById("review-form");
+
+if (reviewForm) {
+    reviewForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById("review-name");
+        const reviewInput = document.getElementById("review-text");
+        const displayNameInput = document.getElementById("display-name");
+
+        if (!nameInput || !reviewInput) {
+            return;
+        }
+
+        const name = nameInput.value.trim();
+        const text = reviewInput.value.trim();
+
+        if (!name || !text || selectedRating === 0) {
+            alert("Vul je naam, review en aantal sterren in.");
+            return;
+        }
+
+        if (
+            !FORMSPREE_ENDPOINT ||
+            FORMSPREE_ENDPOINT === "https://formspree.io/f/moeqnlnq"
+        ) {
+            alert("Het reviewformulier is nog niet gekoppeld. Voeg eerst je Formspree-URL toe.");
+            return;
+        }
+
+        let displayName = name;
+
+        if (displayNameInput) {
+            const displayChoice = displayNameInput.value;
+
+            if (displayChoice === "initials") {
+                displayName = createInitials(name);
+            }
+
+            if (displayChoice === "anonymous") {
+                displayName = "Anoniem";
+            }
+        }
+
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("display_name", displayName);
+        formData.append("rating", selectedRating);
+        formData.append("review", text);
+
+        try {
+            const response = await fetch(FORMSPREE_ENDPOINT, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (response.ok) {
+                alert("Bedankt voor je review! Je review wordt eerst gecontroleerd.");
+
+                reviewForm.reset();
+
+                selectedRating = 0;
+                updateStars(0);
+
+            } else {
+                const data = await response.json().catch(() => null);
+
+                console.error("Formspree fout:", data);
+
+                alert(
+                    "Er ging iets mis bij het versturen van je review. Probeer het later opnieuw."
+                );
+            }
+
+        } catch (error) {
+            console.error("Onverwachte fout bij review:", error);
+
+            alert(
+                "Er ging iets mis bij het versturen van je review. Controleer je internetverbinding en probeer het opnieuw."
+            );
+        }
+    });
 }
 
 

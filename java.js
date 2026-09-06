@@ -2,12 +2,13 @@
 // --- SUPABASE ---
 // ========================
 
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://ylayjxueqejgpmkfoaqt.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+const SUPABASE_URL = "https://jvkwxwzqszmhtjzqkqpp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_N4w9r5cTt8fYQ3xL2kZ7mA1bC6dE0fGh";
 
-
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
 
 // ========================

@@ -1,693 +1,462 @@
-const SUPABASE_URL = "https://ylayjxueqejgpmkfoaqt.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VBhAT_cZRLDZoEIPyfGPEQ_0FdWVCEx";
+// ========================
+// --- SUPABASE ---
+// ========================
+
+const SUPABASE_URL = "https://jvkwxwzqszmhtjzqkqpp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_N4w9r5cTt8fYQ3xL2kZ7mA1bC6dE0fGh";
 
 const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
 );
+
 
 // ========================
 // --- REVEAL EFFECT ---
 // ========================
-const reveals = document.querySelectorAll('.reveal');
 
-function revealOnScroll() {
-  const windowHeight = window.innerHeight;
-  reveals.forEach(el => {
-    const elementTop = el.getBoundingClientRect().top;
-    if (elementTop < windowHeight - 150) {
-      el.classList.add('active');
+const reveals = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+            }
+        });
+    },
+    {
+        threshold: 0.15
     }
-  });
-}
+);
+
+reveals.forEach((el) => observer.observe(el));
+
 
 // ========================
 // --- SMOOTH SCROLL ---
 // ========================
-function smoothScrollTo(element) {
-  if (!element) return;
-  const header = document.querySelector('header');
-  const headerHeight = header ? header.offsetHeight : 0;
-  const elementY = element.getBoundingClientRect().top + window.scrollY;
 
-  window.scrollTo({
-    top: elementY - headerHeight,
-    behavior: 'smooth'
-  });
-}
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+        const target = document.querySelector(this.getAttribute("href"));
 
-// ========================
-// --- NAVIGATIE EVENTS ---
-// ========================
-document.querySelectorAll('nav ul li a').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const targetId = link.getAttribute('href').substring(1);
-    smoothScrollTo(document.getElementById(targetId));
-  });
+        if (target) {
+            e.preventDefault();
+
+            target.scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+    });
 });
 
-document.querySelectorAll('.footer-nav li').forEach(link => {
-  link.addEventListener('click', () => {
-    const id = link.textContent.toLowerCase().replace(/\s/g, '');
-    smoothScrollTo(document.getElementById(id) || document.getElementById('home'));
-  });
+
+// ========================
+// --- NAVIGATIE ---
+// ========================
+
+const navLinks = document.querySelectorAll("nav a");
+
+navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+        navLinks.forEach((item) => item.classList.remove("active"));
+        link.classList.add("active");
+    });
 });
 
-const homeLogo = document.getElementById('home-logo');
-if (homeLogo) {
-  homeLogo.addEventListener('click', e => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
-const planButton = document.querySelector('.hero button');
-const contactSection = document.getElementById('contact');
-if (planButton && contactSection) {
-  planButton.addEventListener('click', e => {
-    e.preventDefault();
-    smoothScrollTo(contactSection);
-  });
-}
 
 // ========================
-// --- FOOTER ---
+// --- FOOTER JAARTAL ---
 // ========================
-const footer = document.querySelector('footer');
-function updateFooter() {
-  if (!footer) return;
-  if (footer.getBoundingClientRect().top < window.innerHeight - 100) {
-    footer.classList.add('active');
-  }
+
+const footer = document.querySelector("footer");
+
+if (footer) {
+    const year = new Date().getFullYear();
+    const yearElement = footer.querySelector(".year");
+
+    if (yearElement) {
+        yearElement.textContent = year;
+    }
 }
 
+
 // ========================
-// --- CONTACT FORM ---
+// --- CONTACTFORMULIER ---
 // ========================
-const contactForm = document.getElementById('contact-form');
+
+const contactForm = document.getElementById("contact-form");
+
 if (contactForm) {
-  contactForm.addEventListener('submit', e => {
-    e.preventDefault();
-    emailjs.sendForm('service_hqpmmr9', 'template_bwi0ss9', contactForm)
-      .then(() => {
-        alert('Bericht succesvol verzonden! Dankjewel ♥');
-        contactForm.reset();
-      })
-      .catch(() => alert('Er ging iets mis. Probeer het later opnieuw.'));
-  });
+    contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const naam = document.getElementById("naam");
+        const email = document.getElementById("email");
+        const bericht = document.getElementById("bericht");
+
+        if (!naam || !email || !bericht) {
+            return;
+        }
+
+        const templateParams = {
+            naam: naam.value,
+            email: email.value,
+            bericht: bericht.value
+        };
+
+        emailjs
+            .send(
+                "service_holistischepraktijk",
+                "template_contact",
+                templateParams
+            )
+            .then(() => {
+                alert("Bedankt voor je bericht! Ik neem zo snel mogelijk contact met je op.");
+                contactForm.reset();
+            })
+            .catch((error) => {
+                console.error("EmailJS fout:", error);
+                alert("Er ging iets mis bij het versturen. Probeer het later opnieuw.");
+            });
+    });
 }
 
 
 // ========================
 // --- LEES MEER ---
 // ========================
-const leesMeerBtn = document.querySelector('.leesmeer');
-const textBlokEl = document.querySelector('.textblok');
+
+const leesMeerBtn = document.querySelector(".leesmeer");
+const textBlokEl = document.querySelector(".full-text");
 
 if (leesMeerBtn && textBlokEl) {
-  leesMeerBtn.addEventListener('click', () => {
-    textBlokEl.classList.toggle('expanded');
-    leesMeerBtn.classList.toggle('expanded');
+    leesMeerBtn.addEventListener("click", () => {
+        textBlokEl.classList.toggle("open");
 
-    // Knoptekst wisselen
-    if (leesMeerBtn.classList.contains('expanded')) {
-      leesMeerBtn.textContent = "Korter";
-    } else {
-      leesMeerBtn.textContent = "Lees meer";
-    }
-  });
+        if (textBlokEl.classList.contains("open")) {
+            leesMeerBtn.textContent = "Lees minder";
+        } else {
+            leesMeerBtn.textContent = "Lees meer";
+        }
+    });
 }
 
 
 // ========================
-// --- DAG & QUOTE ---
+// --- DAGELIJKSE QUOTE ---
 // ========================
-const dagen = ["Zondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag"];
-const quotes = [
-  "Waar liggen de wortels van jouw verhaal?",
-  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
-  "Want als je voelt, dan heel je.",
-  "Kies ik het pad van angst, of stap ik in het veld van liefde?",
-  "Waar liggen de wortels van jouw verhaal?",
-  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
-  "Want als je voelt, dan heel je."
+
+const dagen = [
+    "zondag",
+    "maandag",
+    "dinsdag",
+    "woensdag",
+    "donderdag",
+    "vrijdag",
+    "zaterdag"
 ];
 
+const quotes = {
+    maandag: "Elke dag is een nieuwe kans om dichter bij jezelf te komen.",
+    dinsdag: "Luister naar wat je lichaam je vertelt.",
+    woensdag: "Rust is geen stilstand, maar een moment om opnieuw op te laden.",
+    donderdag: "Je hoeft niet alles vandaag te doen.",
+    vrijdag: "Geef jezelf de ruimte om te voelen wat er werkelijk speelt.",
+    zaterdag: "Zorg goed voor jezelf, zodat je vanuit rust kunt leven.",
+    zondag: "Neem vandaag bewust tijd voor jezelf en voor wat jou voedt."
+};
+
 function showDailyQuote() {
-  const day = new Date().getDay();
-  const quote = document.getElementById('quote');
-  const dayEl = document.getElementById('quote-day');
-  if (quote && dayEl) {
-    quote.textContent = quotes[day];
-    dayEl.textContent = dagen[day];
-  }
+    const citaat = document.querySelector(".daily-quote");
+
+    if (!citaat) {
+        return;
+    }
+
+    const vandaag = dagen[new Date().getDay()];
+
+    if (quotes[vandaag]) {
+        citaat.textContent = quotes[vandaag];
+    }
 }
+
 showDailyQuote();
 
-// ========================
-// --- CITAAT SCROLL EFFECT ---
-// ========================
-const citaat = document.querySelector('.citaat');
-const quoteElementC = document.getElementById('quote');
-let glowDiv = null;
 
-if (quoteElementC && quoteElementC.parentElement) {
-  glowDiv = document.createElement('div');
-  glowDiv.style.position = 'absolute';
-  glowDiv.style.top = '0';
-  glowDiv.style.left = '-100%';
-  glowDiv.style.width = '50%';
-  glowDiv.style.height = '100%';
-  glowDiv.style.background =
-    'linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)';
-  glowDiv.style.transform = 'skewX(-25deg)';
-  glowDiv.style.pointerEvents = 'none';
-  glowDiv.style.zIndex = '3';
-  quoteElementC.parentElement.style.position = 'relative';
-  quoteElementC.parentElement.appendChild(glowDiv);
+// ========================
+// --- QUOTE SCROLL EFFECT ---
+// ========================
+
+const quoteElementC = document.querySelector(".daily-quote");
+
+if (quoteElementC) {
+    window.addEventListener("scroll", () => {
+        const rect = quoteElementC.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        if (rect.top < windowHeight && rect.bottom > 0) {
+            quoteElementC.classList.add("visible");
+        }
+    });
 }
 
-function updateCitaat() {
-  if (!citaat || !quoteElementC) return;
-  const rect = citaat.getBoundingClientRect();
-  const windowHeight = window.innerHeight;
-  const progress = Math.min(Math.max(1 - rect.top / windowHeight, 0), 1);
-
-  const movement = (progress - 0.5) * 20;
-  const scale = 0.95 + progress * 0.05;
-  const opacity = 0.5 + progress * 0.5;
-
-  quoteElementC.style.transform = `translateY(${movement}px) scale(${scale})`;
-  quoteElementC.style.opacity = opacity;
-
-  if (glowDiv) glowDiv.style.left = `${-100 + progress * 200}%`;
-}
 
 // ========================
 // --- PARALLAX ---
 // ========================
-const parallaxImgs = document.querySelectorAll('.parallax-img');
 
-function updateParallax() {
-  const windowHeight = window.innerHeight;
-  parallaxImgs.forEach(img => {
-    const rect = img.getBoundingClientRect();
-    if (rect.bottom > 0 && rect.top < windowHeight) {
-      const progress = 1 - rect.top / windowHeight;
-      img.style.transform = `translateY(${progress * 15}px)`;
-    }
-  });
+const parallaxImgs = document.querySelectorAll(".parallax");
+
+if (parallaxImgs.length > 0) {
+    window.addEventListener("scroll", () => {
+        parallaxImgs.forEach((img) => {
+            const speed = 0.15;
+            const yPos = window.scrollY * speed;
+
+            img.style.transform = `translateY(${yPos}px)`;
+        });
+    });
 }
+
 
 // ========================
 // --- HAMBURGER MENU ---
 // ========================
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
 
-if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('open');
-  });
+const hamburger = document.querySelector(".hamburger");
+const mobileNav = document.querySelector("nav");
 
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('active');
+if (hamburger && mobileNav) {
+    hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        mobileNav.classList.toggle("active");
     });
-  });
+
+    mobileNav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            mobileNav.classList.remove("active");
+        });
+    });
 }
+
 
 // ========================
 // --- SCROLL LOOP ---
 // ========================
+
 function scrollLoop() {
-  revealOnScroll();
-  updateFooter();
-  updateCitaat();
-  updateParallax();
-  window.requestAnimationFrame(scrollLoop);
+    const scrollElements = document.querySelectorAll(".scroll-loop");
+
+    if (scrollElements.length === 0) {
+        return;
+    }
+
+    scrollElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            element.classList.add("scroll-visible");
+        }
+    });
+
+    requestAnimationFrame(scrollLoop);
 }
 
-// Start scroll loop direct na load
-window.addEventListener('load', () => {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
-  scrollLoop(); // ✅ geen dubbele listener
-});
-
 
 // ========================
-// --- REVIEWS ---
+// --- REVIEWS / STERREN ---
 // ========================
 
-const starButtons =
-  document.querySelectorAll(".star-rating button");
-
-const ratingInput =
-  document.getElementById("review-rating");
+const starButtons = document.querySelectorAll(".star-btn");
+let selectedRating = 0;
 
 function updateStars(rating) {
-
-  starButtons.forEach(star => {
-
-    const starRating =
-      Number(star.dataset.rating);
-
-    star.classList.toggle(
-      "selected",
-      starRating <= rating
-    );
-
-  });
-
+    starButtons.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.add("selected");
+        } else {
+            star.classList.remove("selected");
+        }
+    });
 }
 
-starButtons.forEach(star => {
-
-  star.addEventListener("click", () => {
-
-    const rating =
-      Number(star.dataset.rating);
-
-    ratingInput.value = rating;
-
-    updateStars(rating);
-
-  });
-
+starButtons.forEach((star, index) => {
+    star.addEventListener("click", () => {
+        selectedRating = index + 1;
+        updateStars(selectedRating);
+    });
 });
 
-updateStars(5);
-
-async function loadReviews() {
-
-  const reviewsList = document.getElementById("reviews-list");
-
-  if (!reviewsList) return;
-
-  const { data, error } = await supabaseClient
-    .from("reviews")
-    .select("id, review, rating, display_name, created_at")
-    .eq("approved", true)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-
-    console.error("Fout bij laden recensies:", error);
-
-    reviewsList.innerHTML = `
-      <p class="reviews-error">
-        De recensies konden helaas niet worden geladen.
-      </p>
-    `;
-
-    return;
-  }
-
-  if (!data || data.length === 0) {
-
-    reviewsList.innerHTML = `
-      <p class="reviews-empty">
-        Er zijn nog geen recensies geplaatst.
-      </p>
-    `;
-
-    return;
-  }
-
-  reviewsList.innerHTML = "";
-
-  data.forEach(review => {
-
-    const article = document.createElement("article");
-
-    article.className = "review-card";
-
-    const stars = "★".repeat(review.rating);
-
-    article.innerHTML = `
-      <div class="review-stars">
-        ${stars}
-      </div>
-
-      <p class="review-text">
-        “${escapeHTML(review.review)}”
-      </p>
-
-      <p class="review-author">
-        ${escapeHTML(review.display_name)}
-      </p>
-    `;
-
-    reviewsList.appendChild(article);
-
-  });
-}
-
-function escapeHTML(text) {
-
-  const div = document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-const reviewForm = document.getElementById("review-form");
-
-if (reviewForm) {
-
-  reviewForm.addEventListener("submit", async function(e) {
-
-    e.preventDefault();
-
-    const message = document.getElementById("review-message");
-    const submitButton = reviewForm.querySelector("button[type='submit']");
-
-    const reviewText =
-      document.getElementById("review-text").value.trim();
-
-    const name =
-      document.getElementById("review-name").value.trim();
-
-    const displayOption =
-      document.getElementById("display-name").value;
-
-    const rating =
-      Number(document.getElementById("review-rating").value);
-
-    if (reviewText.length < 10) {
-
-      message.textContent =
-        "Schrijf minimaal 10 tekens.";
-
-      return;
-    }
-
-    if (rating < 1 || rating > 5) {
-
-      message.textContent =
-        "Kies een aantal sterren.";
-
-      return;
-    }
-
-    let displayName;
-
-    if (displayOption === "anonymous") {
-
-      displayName = "Anoniem";
-
-    } else if (displayOption === "initials") {
-
-      displayName = createInitials(name);
-
-    } else {
-
-      displayName = name;
-
-    }
-
-    if (!displayName) {
-
-      message.textContent =
-        "Vul je naam in of kies 'Anoniem'.";
-
-      return;
-    }
-
-    submitButton.disabled = true;
-
-    submitButton.textContent =
-      "Bezig met plaatsen...";
-
-    const { error } = await supabaseClient
-      .from("reviews")
-      .insert({
-        review: reviewText,
-        rating: rating,
-        name: name || null,
-        display_name: displayName,
-        approved: true
-      });
-
-    if (error) {
-
-      console.error(error);
-
-      message.textContent =
-        "Er ging iets mis. Probeer het opnieuw.";
-
-      submitButton.disabled = false;
-
-      submitButton.textContent =
-        "Recensie plaatsen";
-
-      return;
-    }
-
-    message.textContent =
-      "Dankjewel! Je recensie is geplaatst ❤️";
-
-    reviewForm.reset();
-
-    document.getElementById("review-rating").value = 5;
-
-    updateStars(5);
-
-    submitButton.disabled = false;
-
-    submitButton.textContent =
-      "Recensie plaatsen";
-
-    await loadReviews();
-
-  });
-
-}
-
-function createInitials(name) {
-
-  if (!name) return "";
-
-  const parts = name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
-  return parts
-    .map(part => part.charAt(0).toUpperCase())
-    .join(".") + ".";
-
-}
 
 // ========================
 // --- REVIEWS LADEN ---
 // ========================
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadReviews();
-});
-// ========================
-// --- FOOTER ---
-// ========================
-const footer = document.querySelector('footer');
-function updateFooter() {
-  if (!footer) return;
-  if (footer.getBoundingClientRect().top < window.innerHeight - 100) {
-    footer.classList.add('active');
-  }
-}
+async function loadReviews() {
+    const reviewsList = document.getElementById("reviews-list");
 
-// ========================
-// --- CONTACT FORM ---
-// ========================
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-  contactForm.addEventListener('submit', e => {
-    e.preventDefault();
-    emailjs.sendForm('service_hqpmmr9', 'template_bwi0ss9', contactForm)
-      .then(() => {
-        alert('Bericht succesvol verzonden! Dankjewel ♥');
-        contactForm.reset();
-      })
-      .catch(() => alert('Er ging iets mis. Probeer het later opnieuw.'));
-  });
-}
-
-// ========================
-// --- REVIEWS SLIDER ---
-// ========================
-let currentReview = 0;
-const reviews = document.querySelectorAll('.review');
-const reviewIntervalTime = 10000; // 10 seconden
-let reviewInterval;
-
-function showReview(index) {
-  reviews.forEach((r, i) => r.classList.toggle('active', i === index));
-  currentReview = index;
-}
-
-// Automatisch starten
-function startReviewInterval() {
-  reviewInterval = setInterval(() => {
-    showReview((currentReview + 1) % reviews.length);
-  }, reviewIntervalTime);
-}
-
-// Stoppen interval (voor eventueel herstart bij klik)
-function resetReviewInterval() {
-  clearInterval(reviewInterval);
-  startReviewInterval();
-}
-
-// Start de loop bij load
-startReviewInterval();
-const reviewBox = document.querySelector('.recensie-box');
-
-if (reviewBox) {
-  reviewBox.addEventListener('click', () => {
-    showReview((currentReview + 1) % reviews.length);
-    resetReviewInterval(); // herstart de automatische loop
-  });
-}
-
-// ========================
-// --- LEES MEER ---
-// ========================
-const leesMeerBtn = document.querySelector('.leesmeer');
-const textBlokEl = document.querySelector('.textblok');
-
-if (leesMeerBtn && textBlokEl) {
-  leesMeerBtn.addEventListener('click', () => {
-    textBlokEl.classList.toggle('expanded');
-    leesMeerBtn.classList.toggle('expanded');
-
-    // Knoptekst wisselen
-    if (leesMeerBtn.classList.contains('expanded')) {
-      leesMeerBtn.textContent = "Korter";
-    } else {
-      leesMeerBtn.textContent = "Lees meer";
+    if (!reviewsList) {
+        return;
     }
-  });
-}
 
+    try {
+        const { data, error } = await supabaseClient
+            .from("reviews")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
 
-// ========================
-// --- DAG & QUOTE ---
-// ========================
-const dagen = ["Zondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag"];
-const quotes = [
-  "Waar liggen de wortels van jouw verhaal?",
-  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
-  "Want als je voelt, dan heel je.",
-  "Kies ik het pad van angst, of stap ik in het veld van liefde?",
-  "Waar liggen de wortels van jouw verhaal?",
-  "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
-  "Want als je voelt, dan heel je."
-];
+        if (error) {
+            console.error("Fout bij ophalen reviews:", error);
+            return;
+        }
 
-function showDailyQuote() {
-  const day = new Date().getDay();
-  const quote = document.getElementById('quote');
-  const dayEl = document.getElementById('quote-day');
-  if (quote && dayEl) {
-    quote.textContent = quotes[day];
-    dayEl.textContent = dagen[day];
-  }
-}
-showDailyQuote();
+        reviewsList.innerHTML = "";
 
-// ========================
-// --- CITAAT SCROLL EFFECT ---
-// ========================
-const citaat = document.querySelector('.citaat');
-const quoteElementC = document.getElementById('quote');
-let glowDiv = null;
+        if (!data || data.length === 0) {
+            reviewsList.innerHTML = `
+                <p class="geen-reviews">
+                    Er zijn nog geen reviews geplaatst.
+                </p>
+            `;
+            return;
+        }
 
-if (quoteElementC && quoteElementC.parentElement) {
-  glowDiv = document.createElement('div');
-  glowDiv.style.position = 'absolute';
-  glowDiv.style.top = '0';
-  glowDiv.style.left = '-100%';
-  glowDiv.style.width = '50%';
-  glowDiv.style.height = '100%';
-  glowDiv.style.background =
-    'linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)';
-  glowDiv.style.transform = 'skewX(-25deg)';
-  glowDiv.style.pointerEvents = 'none';
-  glowDiv.style.zIndex = '3';
-  quoteElementC.parentElement.style.position = 'relative';
-  quoteElementC.parentElement.appendChild(glowDiv);
-}
+        data.forEach((review) => {
+            const reviewCard = document.createElement("div");
 
-function updateCitaat() {
-  if (!citaat || !quoteElementC) return;
-  const rect = citaat.getBoundingClientRect();
-  const windowHeight = window.innerHeight;
-  const progress = Math.min(Math.max(1 - rect.top / windowHeight, 0), 1);
+            reviewCard.className = "review-card";
 
-  const movement = (progress - 0.5) * 20;
-  const scale = 0.95 + progress * 0.05;
-  const opacity = 0.5 + progress * 0.5;
+            const naam = review.name || review.naam || "Anoniem";
+            const tekst = review.review || review.text || review.tekst || "";
+            const rating = Number(review.rating) || 0;
 
-  quoteElementC.style.transform = `translateY(${movement}px) scale(${scale})`;
-  quoteElementC.style.opacity = opacity;
+            const sterren = "★".repeat(rating) + "☆".repeat(5 - rating);
 
-  if (glowDiv) glowDiv.style.left = `${-100 + progress * 200}%`;
-}
+            reviewCard.innerHTML = `
+                <div class="review-stars">${sterren}</div>
+                <p class="review-text">"${escapeHTML(tekst)}"</p>
+                <p class="review-name">${escapeHTML(naam)}</p>
+            `;
 
-// ========================
-// --- PARALLAX ---
-// ========================
-const parallaxImgs = document.querySelectorAll('.parallax-img');
+            reviewsList.appendChild(reviewCard);
+        });
 
-function updateParallax() {
-  const windowHeight = window.innerHeight;
-  parallaxImgs.forEach(img => {
-    const rect = img.getBoundingClientRect();
-    if (rect.bottom > 0 && rect.top < windowHeight) {
-      const progress = 1 - rect.top / windowHeight;
-      img.style.transform = `translateY(${progress * 15}px)`;
+    } catch (error) {
+        console.error("Onverwachte fout bij laden reviews:", error);
     }
-  });
 }
 
-// ========================
-// --- HAMBURGER MENU ---
-// ========================
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
 
-if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('open');
-  });
+// ========================
+// --- HTML VEILIG MAKEN ---
+// ========================
 
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('active');
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+
+// ========================
+// --- REVIEW FORMULIER ---
+// ========================
+
+const reviewForm = document.getElementById("review-form");
+
+if (reviewForm) {
+    reviewForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById("review-name");
+        const reviewInput = document.getElementById("review-text");
+
+        if (!nameInput || !reviewInput) {
+            return;
+        }
+
+        const name = nameInput.value.trim();
+        const text = reviewInput.value.trim();
+
+        if (!name || !text || selectedRating === 0) {
+            alert("Vul je naam, review en aantal sterren in.");
+            return;
+        }
+
+        try {
+            const { error } = await supabaseClient
+                .from("reviews")
+                .insert([
+                    {
+                        name: name,
+                        review: text,
+                        rating: selectedRating
+                    }
+                ]);
+
+            if (error) {
+                console.error("Fout bij plaatsen review:", error);
+                alert("Er ging iets mis bij het plaatsen van je review.");
+                return;
+            }
+
+            alert("Bedankt voor je review!");
+
+            reviewForm.reset();
+
+            selectedRating = 0;
+            updateStars(0);
+
+            loadReviews();
+
+        } catch (error) {
+            console.error("Onverwachte fout:", error);
+            alert("Er ging iets mis. Probeer het later opnieuw.");
+        }
     });
-  });
 }
 
+
 // ========================
-// --- SCROLL LOOP ---
+// --- INITIALEN REVIEW ---
 // ========================
-function scrollLoop() {
-  revealOnScroll();
-  updateFooter();
-  updateCitaat();
-  updateParallax();
-  window.requestAnimationFrame(scrollLoop);
+
+function createInitials(name) {
+    if (!name) {
+        return "";
+    }
+
+    const parts = name.trim().split(/\s+/);
+
+    if (parts.length === 1) {
+        return parts[0].charAt(0).toUpperCase();
+    }
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
 }
 
-// Start scroll loop direct na load
-window.addEventListener('load', () => {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
-  scrollLoop(); // ✅ geen dubbele listener
+
+// ========================
+// --- REVIEWS BIJ LADEN PAGINA ---
+// ========================
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadReviews();
+});
+
+
+// ========================
+// --- START SCROLL LOOP ---
+// ========================
+
+window.addEventListener("load", () => {
+    scrollLoop();
 });

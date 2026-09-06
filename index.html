@@ -148,6 +148,8 @@
 </section>
 
 
+
+```html
 <!-- RECENSIES -->
 <section class="reviews-section reveal" id="recensies">
 
@@ -179,29 +181,65 @@
         Je kunt jouw ervaring hieronder delen.
       </p>
 
-<form id="review-form" action="https://formspree.io/f/moeqnlnq" method="POST"></form>
+      <!-- REVIEW FORMULIER -->
+      <form
+        id="review-form"
+        action="https://formspree.io/f/moeqnlnq"
+        method="POST"
+      >
 
-       <div class="rating-wrapper">
-  <label>Hoeveel sterren geef je?</label>
+        <div class="rating-wrapper">
+          <label>Hoeveel sterren geef je?</label>
 
-  <div class="star-rating" role="radiogroup" aria-label="Aantal sterren">
-    <button type="button" data-rating="1" aria-label="1 ster">★</button>
-    <button type="button" data-rating="2" aria-label="2 sterren">★</button>
-    <button type="button" data-rating="3" aria-label="3 sterren">★</button>
-    <button type="button" data-rating="4" aria-label="4 sterren">★</button>
-    <button type="button" data-rating="5" aria-label="5 sterren">★</button>
-  </div>
+          <div
+            class="star-rating"
+            role="radiogroup"
+            aria-label="Aantal sterren"
+          >
+            <button
+              type="button"
+              data-rating="1"
+              aria-label="1 ster"
+            >★</button>
 
-  <input
-    type="hidden"
-    id="review-rating"
-    name="rating"
-    value="0"
-  >
-</div>
+            <button
+              type="button"
+              data-rating="2"
+              aria-label="2 sterren"
+            >★</button>
+
+            <button
+              type="button"
+              data-rating="3"
+              aria-label="3 sterren"
+            >★</button>
+
+            <button
+              type="button"
+              data-rating="4"
+              aria-label="4 sterren"
+            >★</button>
+
+            <button
+              type="button"
+              data-rating="5"
+              aria-label="5 sterren"
+            >★</button>
+          </div>
+
+          <input
+            type="hidden"
+            id="review-rating"
+            name="rating"
+            value="0"
+          >
+        </div>
+
 
         <div class="form-group">
-          <label for="review-text">Jouw ervaring</label>
+          <label for="review-text">
+            Jouw ervaring
+          </label>
 
           <textarea
             id="review-text"
@@ -213,8 +251,11 @@
           ></textarea>
         </div>
 
+
         <div class="form-group">
-          <label for="review-name">Naam</label>
+          <label for="review-name">
+            Naam
+          </label>
 
           <input
             type="text"
@@ -222,15 +263,20 @@
             name="name"
             placeholder="Bijvoorbeeld: Maria"
             maxlength="100"
+            required
           >
         </div>
+
 
         <div class="form-group">
           <label for="display-name">
             Hoe wil je dat je naam wordt weergegeven?
           </label>
 
-          <select id="display-name" name="display_name">
+          <select
+            id="display-name"
+            name="display_name"
+          >
             <option value="full">
               Mijn volledige naam
             </option>
@@ -245,9 +291,14 @@
           </select>
         </div>
 
-        <button type="submit" class="review-submit">
+
+        <button
+          type="submit"
+          class="review-submit"
+        >
           Recensie plaatsen
         </button>
+
 
         <p
           id="review-message"
@@ -256,10 +307,13 @@
         ></p>
 
       </form>
+
     </div>
 
   </div>
+
 </section>
+```
 
 
 

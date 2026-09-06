@@ -415,14 +415,14 @@ if (reviewForm) {
             alert("Vul je naam, review en aantal sterren in.");
             return;
         }
-
-        if (
-            !FORMSPREE_ENDPOINT ||
-            FORMSPREE_ENDPOINT === "https://formspree.io/f/moeqnlnq"
-        ) {
-            alert("Het reviewformulier is nog niet gekoppeld. Voeg eerst je Formspree-URL toe.");
-            return;
-        }
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqnlnq";
+if (
+    !FORMSPREE_ENDPOINT ||
+    FORMSPREE_ENDPOINT === "HIER-JOUW-FORMSPREE-URL"
+) {
+    alert("Het reviewformulier is nog niet gekoppeld. Voeg eerst je Formspree-URL toe.");
+    return;
+}
 
         let displayName = name;
 

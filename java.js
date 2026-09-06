@@ -259,8 +259,7 @@ function scrollLoop() {
 // ========================
 
 // PLAK HIER JOUW FORMSPREE-URL
-const FORMSPREE_ENDPOINT = "HIER-JOUW-FORMSPREE-URL";
-
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqnlnq";
 
 // ========================
 // --- GOEDGEKEURDE REVIEWS ---

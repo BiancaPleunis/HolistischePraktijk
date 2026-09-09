@@ -1,112 +1,143 @@
-
 // ========================
 // --- REVEAL EFFECT ---
 // ========================
 
 const reveals = document.querySelectorAll(".reveal");
 
-const observer = new IntersectionObserver(
-    (entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("active");
-            }
-        });
-    },
-    {
-        threshold: 0.15
-    }
-);
+function revealOnScroll() {
+    const windowHeight = window.innerHeight;
 
-reveals.forEach((el) => observer.observe(el));
+    reveals.forEach((el) => {
+        const elementTop = el.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 150) {
+            el.classList.add("active");
+        }
+    });
+}
 
 
 // ========================
 // --- SMOOTH SCROLL ---
 // ========================
 
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-        const target = document.querySelector(this.getAttribute("href"));
+function smoothScrollTo(element) {
+    if (!element) return;
 
-        if (target) {
-            e.preventDefault();
+    const header = document.querySelector("header");
+    const headerHeight = header ? header.offsetHeight : 0;
+    const elementY = element.getBoundingClientRect().top + window.scrollY;
 
-            target.scrollIntoView({
-                behavior: "smooth"
-            });
-        }
+    window.scrollTo({
+        top: elementY - headerHeight,
+        behavior: "smooth"
+    });
+}
+
+document.querySelectorAll('nav ul li a').forEach((link) => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const targetId = link.getAttribute("href").substring(1);
+        smoothScrollTo(document.getElementById(targetId));
+
+        // Sluit mobiel menu na klikken
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        if (navLinks) navLinks.classList.remove("open");
+        if (hamburger) hamburger.classList.remove("active");
     });
 });
 
 
 // ========================
-// --- NAVIGATIE ---
+// --- FOOTER NAVIGATIE ---
 // ========================
 
-const navLinks = document.querySelectorAll("nav a");
-
-navLinks.forEach((link) => {
+document.querySelectorAll(".footer-nav li").forEach((link) => {
     link.addEventListener("click", () => {
-        navLinks.forEach((item) => item.classList.remove("active"));
-        link.classList.add("active");
+        const id = link.textContent.toLowerCase().replace(/\s/g, "");
+
+        smoothScrollTo(
+            document.getElementById(id) ||
+            document.getElementById("home")
+        );
     });
 });
 
 
 // ========================
-// --- FOOTER JAARTAL ---
+// --- LOGO NAAR BOVEN ---
+// ========================
+
+const homeLogo = document.getElementById("home-logo");
+
+if (homeLogo) {
+    homeLogo.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+}
+
+
+// ========================
+// --- PLAN EEN SESSIE ---
+// ========================
+
+const planButton = document.querySelector(".hero button");
+const contactSection = document.getElementById("contact");
+
+if (planButton && contactSection) {
+    planButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        smoothScrollTo(contactSection);
+    });
+}
+
+
+// ========================
+// --- FOOTER ANIMATIE ---
 // ========================
 
 const footer = document.querySelector("footer");
 
-if (footer) {
-    const year = new Date().getFullYear();
-    const yearElement = footer.querySelector(".year");
+function updateFooter() {
+    if (!footer) return;
 
-    if (yearElement) {
-        yearElement.textContent = year;
+    if (footer.getBoundingClientRect().top < window.innerHeight - 100) {
+        footer.classList.add("active");
     }
 }
 
 
 // ========================
-// --- CONTACTFORMULIER ---
+// --- CONTACTFORMULIER / EMAILJS ---
 // ========================
 
 const contactForm = document.getElementById("contact-form");
 
 if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
+    contactForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const naam = document.getElementById("naam");
-        const email = document.getElementById("email");
-        const bericht = document.getElementById("bericht");
-
-        if (!naam || !email || !bericht) {
-            return;
-        }
-
-        const templateParams = {
-            naam: naam.value,
-            email: email.value,
-            bericht: bericht.value
-        };
-
         emailjs
-            .send(
-                "service_holistischepraktijk",
-                "template_contact",
-                templateParams
+            .sendForm(
+                "service_hqpmmr9",
+                "template_bwi0ss9",
+                contactForm
             )
             .then(() => {
-                alert("Bedankt voor je bericht! Ik neem zo snel mogelijk contact met je op.");
+                alert("Bericht succesvol verzonden! Dankjewel ♥");
                 contactForm.reset();
             })
             .catch((error) => {
                 console.error("EmailJS fout:", error);
-                alert("Er ging iets mis bij het versturen. Probeer het later opnieuw.");
+                alert("Er ging iets mis. Probeer het later opnieuw.");
             });
     });
 }
@@ -117,56 +148,53 @@ if (contactForm) {
 // ========================
 
 const leesMeerBtn = document.querySelector(".leesmeer");
-const textBlokEl = document.querySelector(".full-text");
+const textBlokEl = document.querySelector(".textblok");
 
 if (leesMeerBtn && textBlokEl) {
     leesMeerBtn.addEventListener("click", () => {
-        textBlokEl.classList.toggle("open");
+        textBlokEl.classList.toggle("expanded");
+        leesMeerBtn.classList.toggle("expanded");
 
-        if (textBlokEl.classList.contains("open")) {
-            leesMeerBtn.textContent = "Lees minder";
+        if (leesMeerBtn.classList.contains("expanded")) {
+            leesMeerBtn.textContent = "Korter";
         } else {
             leesMeerBtn.textContent = "Lees meer";
         }
     });
 }
 
-
 // ========================
 // --- DAGELIJKSE QUOTE ---
 // ========================
 
 const dagen = [
-    "zondag",
-    "maandag",
-    "dinsdag",
-    "woensdag",
-    "donderdag",
-    "vrijdag",
-    "zaterdag"
+    "Zondag",
+    "Maandag",
+    "Dinsdag",
+    "Woensdag",
+    "Donderdag",
+    "Vrijdag",
+    "Zaterdag"
 ];
 
-const quotes = {
-    maandag: "Elke dag is een nieuwe kans om dichter bij jezelf te komen.",
-    dinsdag: "Luister naar wat je lichaam je vertelt.",
-    woensdag: "Rust is geen stilstand, maar een moment om opnieuw op te laden.",
-    donderdag: "Je hoeft niet alles vandaag te doen.",
-    vrijdag: "Geef jezelf de ruimte om te voelen wat er werkelijk speelt.",
-    zaterdag: "Zorg goed voor jezelf, zodat je vanuit rust kunt leven.",
-    zondag: "Neem vandaag bewust tijd voor jezelf en voor wat jou voedt."
-};
+const quotes = [
+    "Waar liggen de wortels van jouw verhaal?",
+    "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
+    "Want als je voelt, dan heel je.",
+    "Kies ik het pad van angst, of stap ik in het veld van liefde?",
+    "Waar liggen de wortels van jouw verhaal?",
+    "Keer terug naar je innerlijke thuis, waar het vuur altijd blijft gloeien.",
+    "Want als je voelt, dan heel je."
+];
 
 function showDailyQuote() {
-    const citaat = document.querySelector(".daily-quote");
+    const day = new Date().getDay();
+    const quote = document.getElementById("quote");
+    const dayEl = document.getElementById("quote-day");
 
-    if (!citaat) {
-        return;
-    }
-
-    const vandaag = dagen[new Date().getDay()];
-
-    if (quotes[vandaag]) {
-        citaat.textContent = quotes[vandaag];
+    if (quote && dayEl) {
+        quote.textContent = quotes[day];
+        dayEl.textContent = dagen[day];
     }
 }
 
@@ -174,20 +202,55 @@ showDailyQuote();
 
 
 // ========================
-// --- QUOTE SCROLL EFFECT ---
+// --- CITAAT SCROLL EFFECT ---
 // ========================
 
-const quoteElementC = document.querySelector(".daily-quote");
+const citaat = document.querySelector(".citaat");
+const quoteElementC = document.getElementById("quote");
 
-if (quoteElementC) {
-    window.addEventListener("scroll", () => {
-        const rect = quoteElementC.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
+let glowDiv = null;
 
-        if (rect.top < windowHeight && rect.bottom > 0) {
-            quoteElementC.classList.add("visible");
-        }
-    });
+if (quoteElementC && quoteElementC.parentElement) {
+    glowDiv = document.createElement("div");
+
+    glowDiv.style.position = "absolute";
+    glowDiv.style.top = "0";
+    glowDiv.style.left = "-100%";
+    glowDiv.style.width = "50%";
+    glowDiv.style.height = "100%";
+    glowDiv.style.background =
+        "linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)";
+    glowDiv.style.transform = "skewX(-25deg)";
+    glowDiv.style.pointerEvents = "none";
+    glowDiv.style.zIndex = "3";
+
+    quoteElementC.parentElement.style.position = "relative";
+    quoteElementC.parentElement.appendChild(glowDiv);
+}
+
+function updateCitaat() {
+    if (!citaat || !quoteElementC) return;
+
+    const rect = citaat.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    const progress = Math.min(
+        Math.max(1 - rect.top / windowHeight, 0),
+        1
+    );
+
+    const movement = (progress - 0.5) * 20;
+    const scale = 0.95 + progress * 0.05;
+    const opacity = 0.5 + progress * 0.5;
+
+    quoteElementC.style.transform =
+        `translateY(${movement}px) scale(${scale})`;
+
+    quoteElementC.style.opacity = opacity;
+
+    if (glowDiv) {
+        glowDiv.style.left = `${-100 + progress * 200}%`;
+    }
 }
 
 
@@ -195,16 +258,20 @@ if (quoteElementC) {
 // --- PARALLAX ---
 // ========================
 
-const parallaxImgs = document.querySelectorAll(".parallax");
+const parallaxImgs = document.querySelectorAll(".parallax-img");
 
-if (parallaxImgs.length > 0) {
-    window.addEventListener("scroll", () => {
-        parallaxImgs.forEach((img) => {
-            const speed = 0.15;
-            const yPos = window.scrollY * speed;
+function updateParallax() {
+    const windowHeight = window.innerHeight;
 
-            img.style.transform = `translateY(${yPos}px)`;
-        });
+    parallaxImgs.forEach((img) => {
+        const rect = img.getBoundingClientRect();
+
+        if (rect.bottom > 0 && rect.top < windowHeight) {
+            const progress = 1 - rect.top / windowHeight;
+
+            img.style.transform =
+                `translateY(${progress * 15}px)`;
+        }
     });
 }
 
@@ -214,61 +281,27 @@ if (parallaxImgs.length > 0) {
 // ========================
 
 const hamburger = document.querySelector(".hamburger");
-const mobileNav = document.querySelector("nav");
+const navLinks = document.querySelector(".nav-links");
 
-if (hamburger && mobileNav) {
+if (hamburger && navLinks) {
     hamburger.addEventListener("click", () => {
         hamburger.classList.toggle("active");
-        mobileNav.classList.toggle("active");
+        navLinks.classList.toggle("open");
     });
 
-    mobileNav.querySelectorAll("a").forEach((link) => {
+    navLinks.querySelectorAll("a").forEach((link) => {
         link.addEventListener("click", () => {
+            navLinks.classList.remove("open");
             hamburger.classList.remove("active");
-            mobileNav.classList.remove("active");
         });
     });
 }
-
-
-// ========================
-// --- SCROLL LOOP ---
-// ========================
-
-function scrollLoop() {
-    const scrollElements = document.querySelectorAll(".scroll-loop");
-
-    if (scrollElements.length === 0) {
-        return;
-    }
-
-    scrollElements.forEach((element) => {
-        const rect = element.getBoundingClientRect();
-
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            element.classList.add("scroll-visible");
-        }
-    });
-
-    requestAnimationFrame(scrollLoop);
-}
-
 
 // ========================
 // --- REVIEWS / FORMSPREE ---
 // ========================
 
-// PLAK HIER JOUW FORMSPREE-URL
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqnlnq";
-
-// ========================
-// --- GOEDGEKEURDE REVIEWS ---
-// ========================
-//
-// Hier komen de reviews te staan die jij hebt goedgekeurd.
-// Nieuwe reviews worden eerst naar jou verstuurd via Formspree.
-// Nadat jij een review hebt goedgekeurd, kunnen we hem hier toevoegen.
-//
 
 const approvedReviews = [
     {
@@ -280,20 +313,17 @@ const approvedReviews = [
         name: "P.",
         rating: 5,
         text: "Met mijn hoofd gaat t een stuk beter, geen idee hoe t werkt, maar t werkt!"
-    }
-    ,
+    },
     {
         name: "C.",
         rating: 5,
         text: "Dankjewel Bianca de pijn in mijn onderrug is vanaf half vier al een stuk minder."
-    }
-     ,
+    },
     {
         name: "P.",
         rating: 5,
         text: "Hoi Bianca, ik voel me weer wat meer mens na de reiki van jou👍"
-    }
-     ,
+    },
     {
         name: "P.",
         rating: 5,
@@ -320,15 +350,13 @@ function escapeHTML(text) {
 function loadReviews() {
     const reviewsList = document.getElementById("reviews-list");
 
-    if (!reviewsList) {
-        return;
-    }
+    if (!reviewsList) return;
 
     reviewsList.innerHTML = "";
 
     if (!approvedReviews || approvedReviews.length === 0) {
         reviewsList.innerHTML = `
-            <p class="geen-reviews">
+            <p class="reviews-empty">
                 Er zijn nog geen reviews geplaatst.
             </p>
         `;
@@ -337,12 +365,14 @@ function loadReviews() {
 
     approvedReviews.forEach((review) => {
         const reviewCard = document.createElement("div");
-
         reviewCard.className = "review-card";
 
         const naam = review.name || "Anoniem";
         const tekst = review.text || "";
-        const rating = Math.min(5, Math.max(0, Number(review.rating) || 0));
+        const rating = Math.min(
+            5,
+            Math.max(0, Number(review.rating) || 0)
+        );
 
         const sterren =
             "★".repeat(rating) +
@@ -351,7 +381,7 @@ function loadReviews() {
         reviewCard.innerHTML = `
             <div class="review-stars">${sterren}</div>
             <p class="review-text">"${escapeHTML(tekst)}"</p>
-            <p class="review-name">${escapeHTML(naam)}</p>
+            <p class="review-author">${escapeHTML(naam)}</p>
         `;
 
         reviewsList.appendChild(reviewCard);
@@ -395,9 +425,7 @@ starButtons.forEach((star) => {
 // ========================
 
 function createInitials(name) {
-    if (!name) {
-        return "";
-    }
+    if (!name) return "";
 
     const parts = name.trim().split(/\s+/);
 
@@ -419,16 +447,14 @@ function createInitials(name) {
 const reviewForm = document.getElementById("review-form");
 
 if (reviewForm) {
-    reviewForm.addEventListener("submit", async function (e) {
+    reviewForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const nameInput = document.getElementById("review-name");
         const reviewInput = document.getElementById("review-text");
         const displayNameInput = document.getElementById("display-name");
 
-        if (!nameInput || !reviewInput) {
-            return;
-        }
+        if (!nameInput || !reviewInput) return;
 
         const name = nameInput.value.trim();
         const text = reviewInput.value.trim();
@@ -437,14 +463,6 @@ if (reviewForm) {
             alert("Vul je naam, review en aantal sterren in.");
             return;
         }
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/moeqnlnq";
-if (
-    !FORMSPREE_ENDPOINT ||
-    FORMSPREE_ENDPOINT === "HIER-JOUW-FORMSPREE-URL"
-) {
-    alert("Het reviewformulier is nog niet gekoppeld. Voeg eerst je Formspree-URL toe.");
-    return;
-}
 
         let displayName = name;
 
@@ -477,23 +495,21 @@ if (
             });
 
             if (response.ok) {
-                alert("Bedankt voor je review! Je review wordt eerst gecontroleerd.");
+                alert(
+                    "Bedankt voor je review! Je review wordt eerst gecontroleerd."
+                );
 
                 reviewForm.reset();
-
                 selectedRating = 0;
                 updateStars(0);
-
             } else {
                 const data = await response.json().catch(() => null);
-
                 console.error("Formspree fout:", data);
 
                 alert(
                     "Er ging iets mis bij het versturen van je review. Probeer het later opnieuw."
                 );
             }
-
         } catch (error) {
             console.error("Onverwachte fout bij review:", error);
 
@@ -506,18 +522,28 @@ if (
 
 
 // ========================
-// --- REVIEWS BIJ LADEN PAGINA ---
+// --- SCROLL LOOP ---
 // ========================
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadReviews();
-});
+function scrollLoop() {
+    revealOnScroll();
+    updateFooter();
+    updateCitaat();
+    updateParallax();
+
+    window.requestAnimationFrame(scrollLoop);
+}
 
 
 // ========================
-// --- START SCROLL LOOP ---
+// --- START ---
 // ========================
 
 window.addEventListener("load", () => {
+    document
+        .querySelectorAll(".reveal")
+        .forEach((el) => el.classList.add("active"));
+
+    loadReviews();
     scrollLoop();
 });
